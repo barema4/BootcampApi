@@ -1,14 +1,26 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const morgan = require('morgan');
+const connectDB = require('./config/db')
+
+
+// load env vars
+dotenv.config({path: './config/config.env'})
+
+// connect to database
+
+connectDB()
 
 // Routes files
 
 const bootcamps = require('./routes/bootcamps')
 
-// load env vars
-dotenv.config({path: './config/config.env'})
-
 const app = express()
+
+
+if(process.env.NODE_ENV === 'development'){
+    app.use(morgan('dev'))
+}
 
 //Mount the routes
 app.use('/api/v1/bootcamps', bootcamps)
@@ -16,4 +28,12 @@ app.use('/api/v1/bootcamps', bootcamps)
 const PORT = process.env.PORT || 3000;
 console.log('PORT', PORT)
 
-app.listen(PORT, console.log(`server runing on ${PORT}`))
+const server = app.listen(PORT, console.log(`server runing on ${PORT}`))
+
+// handle unhandled promise rejections
+
+process.on('unhandledRejections', (error, promise) => {
+    console.log(`Error: ${error.message}`);
+    // Close server & exit process
+    server.close(() => process.exit(1))
+})
