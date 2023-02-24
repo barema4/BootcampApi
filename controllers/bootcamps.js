@@ -65,3 +65,12 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
         }
         res.status(200).json({success: true, data: {}})
 })
+
+
+// @desc    Get bootcamps with the radius
+// @route   Get /api/v1/bootcamps/radius/:zicode/:distance
+// @access  private
+exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
+    
+   
+})
